@@ -1,8 +1,5 @@
-const express = require("express");
-
 var amqp = require('amqplib/callback_api');
 var fs = require('fs');
-const { FILE } = require("dns");
 const url = 'amqp://rabbitmq';
 const receivequeue = 'compse140.o';
 const sendqueue = 'compse140.i';
