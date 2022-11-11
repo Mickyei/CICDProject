@@ -1,0 +1,73 @@
+# `docker-compose up --build`
+
+version: "3"
+
+services:
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - backend
+
+  observer:
+    image: "obs"
+    depends_on:
+      - rabbitmq
+    command: ["./utils/wait-for-it.sh", "rapid-runner-rabbit:5672", "--",  "npm", "start"]
+    build:
+      dockerfile: Dockerfile
+      context: ./observer
+    networks:
+     - backend
+    volumes:
+      - messages:/var/lib/observer/data
+
+  httpserver:
+    image: "httpserver"
+    depends_on:
+      - rabbitmq
+    command: ["npm", "start"]
+    build:
+      dockerfile: Dockerfile
+      context: ./httpserver
+    ports:
+      - '8080:8080'
+    expose:
+      - '8080:8080'
+    networks:
+     - backend
+    volumes:
+      - messages:/var/lib/observer/data
+  
+
+  intermediate:
+    image: "imed"
+    depends_on:
+      - rabbitmq
+    command: ["./utils/wait-for-it.sh", "rapid-runner-rabbit:5672", "--",  "npm", "start"]
+    build:
+      dockerfile: Dockerfile
+      context: ./intermediate
+    networks:
+     - backend
+
+  message-sender:
+    image: "orig"
+    depends_on:
+      - rabbitmq
+    command: ["./utils/wait-for-it.sh", "rapid-runner-rabbit:5672", "--",  "npm", "start"]
+    build:
+      dockerfile: Dockerfile
+      context: ./message-sender
+    networks:
+     - backend
+  
+
+networks:
+  backend:
+
+volumes:
+  messages:
