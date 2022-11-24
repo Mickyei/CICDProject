@@ -3,4 +3,4 @@ run_tests:
   before_script:
     - npm install
   script:
-    npm start
+   docker compose up -d
