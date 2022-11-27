@@ -1,6 +1,4 @@
 run_tests:
-  image: node:10
-  before_script:
-    - npm install
+  image: docker
   script:
-    npm start
+    docker compose up --build
