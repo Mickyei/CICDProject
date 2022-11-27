@@ -1,4 +1,6 @@
 run_tests:
-  image: docker
+  image: docker:18.09.7-dind
+  before_script:
+  - export DOCKER_HOST="tcp://${HOSTNAME}-docker-0:2375/"
   script:
     docker compose up --build
