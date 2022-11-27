@@ -1,5 +1,5 @@
 run_tests:
-  image: docker:18.09.7-dind
+  image: docker/compose
   before_script:
   - export DOCKER_HOST="tcp://${HOSTNAME}-docker-0:2375/"
   script:
