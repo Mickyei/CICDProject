@@ -1,6 +1,10 @@
 run_tests:
   image: docker/compose
   before_script:
-  - export DOCKER_HOST="tcp://${HOSTNAME}-docker-0:2375/"
+    - docker version
+    - docker-compose version
+    - export DOCKER_HOST="tcp://${HOSTNAME}-docker-0:2375/"
   script:
-    docker compose up --build
+    - docker-compose down
+    - docker-compose build
+    - docker-compose up tester-image
