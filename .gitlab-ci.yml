@@ -1,5 +1,7 @@
 run_tests:
-  image: docker/compose
+  image: docker:latest
+  services:
+    - docker:dind
   before_script:
     - docker version
     - docker-compose version
